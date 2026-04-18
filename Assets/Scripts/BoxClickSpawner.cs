@@ -10,7 +10,7 @@ public class BoxClickSpawner : MonoBehaviour
     public GridManager gridManager; // [추가] 그리드 매니저 연결용
 
     [Header("쿨타임 설정")]
-    public int maxClickCount = 5;
+    public int maxClickCount = 3;
     public float cooltimeDuration = 10f;
 
     private int currentClickCount = 0;
