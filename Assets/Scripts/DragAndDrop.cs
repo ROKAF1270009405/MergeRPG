@@ -30,8 +30,6 @@ public class DragAndDrop : MonoBehaviour
 
     void Update()
     {
-        if (mainCamera == null) mainCamera = Camera.main;
-
         // 1. 클릭 감지 - 드래그 앤 드랍
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
@@ -86,41 +84,33 @@ public class DragAndDrop : MonoBehaviour
     {
         if (isMerging) return;
 
-        DragAndDrop otherScript = other.GetComponent<DragAndDrop>();
-        if (other.CompareTag("Block") && otherScript != null && !otherScript.isMerging)
+        Block otherBlock = other.GetComponent<Block>();
+       // DragAndDrop otherScript = other.GetComponent<DragAndDrop>();
+        if (other.CompareTag("Block") && otherBlock != null)
         {
-            if (otherScript.level == this.level)
-            {
-                if (gameObject.GetInstanceID() > other.gameObject.GetInstanceID())
-                {
-                    isMerging = true;
-                    otherScript.isMerging = true;
-
-                    Vector3 spawnPos = (transform.position + other.transform.position) / 2f;
-                    spawnPos.z = 0;
-
-                    // [수정된 부분] 이름 정리를 포함한 생성 로직
-                    GameObject newBlock = Instantiate(gameObject, spawnPos, Quaternion.identity);
-
-                    // (Clone) 글자를 없애고 깔끔하게 이름 짓기
-                    newBlock.name = "Block_Level_" + (this.level + 1);
-
-                    DragAndDrop newScript = newBlock.GetComponent<DragAndDrop>();
-                    if (newScript != null)
-                    {
-                        newScript.level = this.level + 1;
-                        newScript.isMerging = false;
-                        newScript.isDragging = false;
-                        newScript.UpdateVisual();
-                    }
-
-                    Destroy(gameObject);
-                    Destroy(other.gameObject);
-                }
-            }
+            MergeBlock(otherBlock);
         }
     }
 
+    private bool MergeBlock(Block otherBlock)
+    {
+        if (otherBlock.level == this.level)
+        {
+            Vector3 spawnPos = (transform.position + otherBlock.transform.position) / 2f;
+            spawnPos.z = 0;
+
+            otherBlock.transform.position = spawnPos;
+            otherBlock.level++;
+            otherBlock.GetComponent<DragAndDrop>().isMerging = false;
+            otherBlock.GetComponent<DragAndDrop>().isDragging = false;
+            otherBlock.GetComponent<DragAndDrop>().UpdateVisual();
+            
+            Destroy(gameObject);
+            return true;
+        }
+
+        return false;
+    }
     public void UpdateVisual()
     {
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
