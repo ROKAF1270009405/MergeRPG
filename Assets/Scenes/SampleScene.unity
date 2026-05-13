@@ -624,9 +624,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoxClickSpawner
   blockPrefab: {fileID: 3337739006243938484, guid: ef335a6a7d6f2f94783ecc519c247421, type: 3}
-  blockParent: {fileID: 0}
+  blockParent: {fileID: 1612046927}
   cooltimeSlider: {fileID: 696713630}
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 1612046930}
   maxClickCount: 5
   cooltimeDuration: 10
 --- !u!212 &229190936
@@ -2485,6 +2485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   slotPrefab: {fileID: 5834316048942859165, guid: fd5994d7a26054d45a2f7d4919b5f44c, type: 3}
+  blockPrefab: {fileID: 3337739006243938484, guid: ef335a6a7d6f2f94783ecc519c247421, type: 3}
   gridParent: {fileID: 1612046927}
   columns: 11
   rows: 7

@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 1317932687340598166}
   - component: {fileID: 2203227573679668575}
   - component: {fileID: 4608103657961595367}
-  - component: {fileID: -582175434657115197}
   - component: {fileID: -5141445570164852554}
+  - component: {fileID: -921487307317099275}
   m_Layer: 0
   m_Name: Block_Level_1
   m_TagString: Block
@@ -246,18 +246,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &-582175434657115197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3337739006243938484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cc9f7239af332841b63d52792fb7fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BlockDrag
 --- !u!114 &-5141445570164852554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,3 +259,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Block
   level: 1
+  blockPosition: {x: 0, y: 0}
+--- !u!114 &-921487307317099275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3337739006243938484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cc9f7239af332841b63d52792fb7fe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlockDrag
+  currentSlot: {fileID: 0}
+  currentBlock: {fileID: 0}

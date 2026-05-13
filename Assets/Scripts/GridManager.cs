@@ -21,9 +21,6 @@ public class GridManager : MonoBehaviour
         GenerateRhombusGrid();
     }
 
-    // 인스펙터에서 값을 바꿀 때마다 실시간으로 확인하고 싶다면 이 기능을 쓰세요!
-    // void OnValidate() { if(gridParent != null) GenerateRhombusGrid(); }
-
     public void GenerateRhombusGrid()
     {
         // 1. 기존 슬롯 청소
@@ -50,6 +47,9 @@ public class GridManager : MonoBehaviour
 
                 GameObject newSlot = Instantiate(slotPrefab, gridParent);
                 RectTransform rect = newSlot.GetComponent<RectTransform>();
+                Slot slotScript = newSlot.GetComponent<Slot>();
+                slotScript.gridX = c;
+                slotScript.gridY = r;
 
                 // 슬롯 크기 결정
                 rect.sizeDelta = new Vector2(cellSize, cellSize);
@@ -73,5 +73,27 @@ public class GridManager : MonoBehaviour
         bool bottomRight = ((columns - 1 - c) + (rows - 1 - r)) < cornerSize;
 
         return topLeft || topRight || bottomLeft || bottomRight;
+    }
+
+    public bool TrySpawnBlock(GameObject prefab)
+    {
+        Slot emptySlot = GetFirstEmptySlot();
+        if (emptySlot == null) return false;
+        
+        GameObject newBlock = Instantiate(prefab, emptySlot.transform);
+        emptySlot.SetItem(newBlock);
+        
+        newBlock.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+        return true;
+    }
+    private Slot GetFirstEmptySlot()
+    {
+        foreach (RectTransform slotRect in allSlots)
+        {
+            Slot s = slotRect.GetComponent<Slot>();
+            if (s != null && !s.isFull) return s;
+        }
+        return null;
     }
 }

@@ -5,6 +5,7 @@ public class Block : MonoBehaviour
 {
     public int level = 1; // 현재 블록 레벨
     public Vector2 blockPosition = Vector2.zero;
+    public Slot currentSlot;
     
     // 레벨이 오를 때 호출할 함수 (나중에 이미지 변경 등을 위해)
     public void SetLevel(int newLevel)

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+//드래그 로직
+//블럭에 부여되는 드래그 기능
 public class BlockDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private RectTransform rectTransform;
@@ -19,6 +21,7 @@ public class BlockDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        transform.SetParent(canvas.transform);
         canvasGroup.alpha = 0.6f; // 잡았을 때 살짝 투명하게
         canvasGroup.blocksRaycasts = false; // 중요! 드래그 중엔 마우스가 이 물체를 통과하게 함
     }
@@ -35,36 +38,52 @@ public class BlockDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         canvasGroup.blocksRaycasts = true;
 
         GameObject target = eventData.pointerCurrentRaycast.gameObject;
-
+        Block myBlock = GetComponent<Block>();
+        Slot currentSlot = myBlock.currentSlot;
+        
         if (target != null)
         {
-            Block targetBlock = target.GetComponentInParent<Block>();
-            // 드래그 중인 나(this)에게서도 Block 컴포넌트를 가져와야 레벨을 알 수 있습니다!
-            Block myBlock = GetComponent<Block>();
+            Slot targetSlot = target.GetComponentInParent<Slot>();
 
-            if (targetBlock != null && targetBlock != myBlock && myBlock != null)
+            if (targetSlot != null)
             {
-                // 두 블록의 레벨이 같은지 비교
-                if (targetBlock.level == myBlock.level)
+                if (targetSlot.isFull)
                 {
-                    MergeWith(targetBlock);
+                    //머지 성공
+                    Block targetBlock = targetSlot.storedItem.GetComponent<Block>();
+                    
+                    if (targetBlock != null && targetBlock.level == myBlock.level && targetBlock != myBlock)
+                    {
+                        targetBlock.SetLevel(targetBlock.level + 1);
+                        if (currentSlot != null)
+                        {
+                            currentSlot.SetItem(null);
+                            Destroy(this.gameObject);
+                            Debug.Log("합치기! 레벨 업!");
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    //이동
+                    if(currentSlot != null) currentSlot.SetItem(null);
+                    
+                    targetSlot.SetItem(this.gameObject);
+                    this.transform.SetParent(targetSlot.transform);
+                    rectTransform.anchoredPosition = Vector2.zero;
                     return;
                 }
             }
         }
-
+        transform.SetParent(currentSlot.transform);
         ReturnToSlot();
-    }
-
-    void MergeWith(Block target)
-    {
-        Debug.Log("합치기! 레벨 업!");
-        target.SetLevel(target.level + 1); // 타겟 레벨 상승
-        Destroy(this.gameObject); // 드래그하던 블록은 삭제
     }
 
     void ReturnToSlot()
     {
+        rectTransform.anchoredPosition = Vector2.zero;
+        
         // 일단은 제자리에 가만히 있게 하거나, 
         // 나중에 Slot 좌표를 저장해뒀다가 거기로 튕겨 돌아가게 만듭니다.
     }
